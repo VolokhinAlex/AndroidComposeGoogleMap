@@ -13,19 +13,40 @@ class PointViewModel(
     private val repository: PointsRepository
 ) : ViewModel() {
 
+    /**
+     * Method for adding a marker to the repository
+     * @param point - The marker to add
+     */
+
     fun addPoint(point: Point) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.insert(point)
         }
     }
 
+    /**
+     * Method for getting a list of markers from the repository
+     */
+
     fun getPoints() = repository.getPoints()
+
+    /**
+     * Method for deleting a marker from the repository
+     * @param point - The marker to delete
+     */
 
     fun delete(point: Point) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.delete(point)
         }
     }
+
+    /**
+     * Method for getting an address by lat lon coordinates
+     * @param geocoder - Object for getting an address by coordinates
+     * @param lat - The latitude coordinate for getting the address
+     * @param lon - The longitude coordinate for getting the address
+     */
 
     fun getAddressFromLocation(geocoder: Geocoder, lat: Double, lon: Double): Address? {
         var addresses: List<Address>? = null
@@ -37,6 +58,11 @@ class PointViewModel(
         }
         return addresses?.get(0)
     }
+
+    /**
+     * Method for updating a marker in the repository
+     * @param point - The marker to update
+     */
 
     fun update(point: Point) {
         viewModelScope.launch(Dispatchers.IO) {

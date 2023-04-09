@@ -12,13 +12,21 @@ import org.koin.dsl.module
 
 private const val DATABASE = "points.db"
 
+/**
+ * Dependencies for the local database
+ */
+
 val database = module {
     single {
         Room.databaseBuilder(get(), PointDatabase::class.java, DATABASE).build()
     }
 }
 
-val homeScreen = module {
+/**
+ * Common dependencies for multiple screens
+ */
+
+val common = module {
     factory<PointsDataSource> { LocalPointsDataSource(get()) }
     factory<PointsRepository> { LocalPointsRepository(get()) }
     viewModel { PointViewModel(get()) }

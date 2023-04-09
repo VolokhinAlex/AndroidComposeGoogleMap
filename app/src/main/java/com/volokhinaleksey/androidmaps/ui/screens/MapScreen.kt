@@ -27,12 +27,17 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import java.util.Locale
 
+/**
+ * Screen for displaying Google maps
+ */
 
 @Composable
 fun MapScreen(pointViewModel: PointViewModel = koinViewModel()) {
-    val points = remember {
-        mutableStateListOf<Point>()
-    }
+    val points = remember { mutableStateListOf<Point>() }
+    val uiSettings = remember { MapUiSettings(myLocationButtonEnabled = true) }
+    val properties by remember { mutableStateOf(MapProperties(isMyLocationEnabled = true)) }
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     pointViewModel.getPoints().collectAsState(initial = emptyList()).value.let {
         points.addAll(it)
     }
@@ -40,14 +45,6 @@ fun MapScreen(pointViewModel: PointViewModel = koinViewModel()) {
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(defaultLocation, 10f)
     }
-    val uiSettings = remember {
-        MapUiSettings(myLocationButtonEnabled = true)
-    }
-    val properties by remember {
-        mutableStateOf(MapProperties(isMyLocationEnabled = true))
-    }
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
     GoogleMap(
         modifier = Modifier.fillMaxSize(),
         cameraPositionState = cameraPositionState,
@@ -81,5 +78,4 @@ fun MapScreen(pointViewModel: PointViewModel = koinViewModel()) {
             )
         }
     }
-
 }

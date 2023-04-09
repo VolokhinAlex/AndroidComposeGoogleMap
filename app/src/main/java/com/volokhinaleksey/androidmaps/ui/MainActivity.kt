@@ -29,6 +29,7 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.volokhinaleksey.androidmaps.ui.navigation.ScreenState
 import com.volokhinaleksey.androidmaps.ui.screens.MapScreen
 import com.volokhinaleksey.androidmaps.ui.screens.PointsScreen
+import com.volokhinaleksey.androidmaps.ui.theme.AndroidMapsTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -43,18 +44,20 @@ class MainActivity : ComponentActivity() {
                     Manifest.permission.ACCESS_FINE_LOCATION,
                 )
             )
-            if (locationPermissionsState.allPermissionsGranted) {
-                Navigation()
-            } else {
-                Column {
-                    val allPermissionsRevoked =
-                        locationPermissionsState.permissions.size ==
-                                locationPermissionsState.revokedPermissions.size
-                    if (!allPermissionsRevoked) {
-                        Navigation()
-                    } else {
-                        LaunchedEffect(key1 = true) {
-                            locationPermissionsState.launchMultiplePermissionRequest()
+            AndroidMapsTheme {
+                if (locationPermissionsState.allPermissionsGranted) {
+                    Navigation()
+                } else {
+                    Column {
+                        val allPermissionsRevoked =
+                            locationPermissionsState.permissions.size ==
+                                    locationPermissionsState.revokedPermissions.size
+                        if (!allPermissionsRevoked) {
+                            Navigation()
+                        } else {
+                            LaunchedEffect(key1 = true) {
+                                locationPermissionsState.launchMultiplePermissionRequest()
+                            }
                         }
                     }
                 }

@@ -2,7 +2,7 @@ package com.volokhinaleksey.androidmaps.app
 
 import android.app.Application
 import com.volokhinaleksey.androidmaps.di.database
-import com.volokhinaleksey.androidmaps.di.homeScreen
+import com.volokhinaleksey.androidmaps.di.common
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -12,7 +12,7 @@ class MapApplication : Application() {
         super.onCreate()
         startKoin {
             androidContext(this@MapApplication)
-            modules(listOf(database, homeScreen))
+            modules(listOf(database, common))
         }
     }
 

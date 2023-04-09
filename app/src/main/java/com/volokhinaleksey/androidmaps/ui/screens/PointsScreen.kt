@@ -30,6 +30,10 @@ import com.volokhinaleksey.androidmaps.models.Point
 import com.volokhinaleksey.androidmaps.viewmodel.PointViewModel
 import org.koin.androidx.compose.koinViewModel
 
+/**
+ * A screen for displaying/editing/deleting a list of markers.
+ */
+
 @Composable
 fun PointsScreen(pointViewModel: PointViewModel = koinViewModel()) {
     pointViewModel.getPoints().collectAsState(initial = emptyList()).value.let {
