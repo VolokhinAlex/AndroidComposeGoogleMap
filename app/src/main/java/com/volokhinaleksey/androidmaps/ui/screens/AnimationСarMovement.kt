@@ -6,21 +6,24 @@ import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.Polyline
 import com.volokhinaleksey.androidmaps.R
 
 
 @Composable
 fun AnimationCarMovement(
-    directionPoint: MutableList<LatLng>,
+    directionPoint: List<LatLng>,
     cameraPositionState: CameraPositionState,
 ) {
     var isDriving by remember { mutableStateOf(false) }
@@ -28,12 +31,20 @@ fun AnimationCarMovement(
     var carRotation by remember {
         mutableStateOf(getCarRotation(directionPoint[0], directionPoint[1]))
     }
+    val points = remember {
+        val list = mutableStateListOf(directionPoint[0])
+        list.clear()
+        list.addAll(directionPoint)
+        list.removeAt(0)
+        list
+    }
     if (isDriving) {
         AnimatedCar(
             directionPoint,
             carUpdateLocation = { newLatLng, rotation ->
                 carPosition = newLatLng
                 carRotation = rotation
+                points.remove(newLatLng)
             }
         )
     }
@@ -48,10 +59,11 @@ fun AnimationCarMovement(
         },
         anchor = Offset(0.5f, 0.5f)
     )
+    Polyline(points = points.toList(), color = Color.Gray)
 }
 
 @Composable
-fun AnimatedCar(directionPoint: MutableList<LatLng>, carUpdateLocation: (LatLng, Float) -> Unit) {
+fun AnimatedCar(directionPoint: List<LatLng>, carUpdateLocation: (LatLng, Float) -> Unit) {
     val carAnimation = remember { Animatable(initialValue = 0f) }
     var carPosition by remember { mutableStateOf(directionPoint[0]) }
     var carRotation by remember {
