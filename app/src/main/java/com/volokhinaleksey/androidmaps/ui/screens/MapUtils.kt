@@ -9,7 +9,7 @@ import com.google.android.gms.maps.model.LatLng
 import kotlin.math.abs
 import kotlin.math.atan
 
-val road = listOf(
+val road = mutableListOf(
     LatLng(1.2816104951029417, 103.87605261057615),
     LatLng(1.2844180638825455, 103.87805018574),
     LatLng(1.2882241649126345, 103.87667588889599),
